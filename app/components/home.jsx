@@ -1,6 +1,6 @@
 var React = require("react")
 var Axios = require('axios')
-var {get, post} = Axios
+var {get, post, delete} = Axios
 
 var TodoItem = require('./item')
 var BlankItem = require('./blankItem')
@@ -31,12 +31,17 @@ var Home = React.createClass({
       headers: {'Content-Type': 'application/json'},
       data: JSON.stringify(item)
     })
-    .then(() => {
-      var todos = this.state.todos;
-      todos.push(item)
-      this.setState({
-        todos
-      })
+    .then((res) => {
+      if (res.data.success) {
+        item._id = res.data._id
+        var todos = this.state.todos
+        todos.push(item)
+        this.setState({
+          todos
+        })
+      } else {
+        console.log('airhor')
+      }
     })
     .catch((airhor) => {
       console.log(airhor)
@@ -44,10 +49,17 @@ var Home = React.createClass({
   },
 
   remove(i) {
-    var todos = this.state.todos;
-    todos.splice(i, 1)
-    this.setState({
-      todos
+    var todo = this.state.todos[i];
+    delete('/api/todos', {_id: todo._id})
+    .then((datr) => {
+      console.log(datr)
+      var todos = this.state.todos;
+      todos.splice(i, 1)
+      this.setState({
+        todos
+      })
+    }).catch((err) => {
+      console.log(err)
     })
   },
 
