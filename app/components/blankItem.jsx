@@ -15,7 +15,8 @@ var BlankItem = React.createClass({
   add() {
     var item = {
       name: this.state.name,
-      description: this.state.description
+      description: this.state.description,
+      completed: false
     }
 
     if (item.name && item.description) {
