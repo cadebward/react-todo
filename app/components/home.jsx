@@ -1,4 +1,6 @@
 var React = require("react")
+var Axios = require('axios')
+var {get, post} = Axios
 
 var TodoItem = require('./item')
 var BlankItem = require('./blankItem')
@@ -11,21 +13,33 @@ var Home = React.createClass({
   },
 
   componentDidMount() {
-    this.setState({
-      todos: [
-        {name: 'Clean Cat', description: 'Just do it'},
-        {name: 'Clean Car', description: 'Just do it'},
-        {name: 'Clean Cafe', description: 'Just do it'},
-      ]
+    get('/api/todos').then((datr) => {
+      if (datr.data) {
+        this.setState({
+          todos: datr.data
+        })
+      }
+    }).catch((err) => {
+      console.log(err)
     })
   },
 
   add(item) {
-    var todos = this.state.todos;
-    item
-    todos.push(item)
-    this.setState({
-      todos
+    Axios({
+      url: '/api/todos',
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      data: JSON.stringify(item)
+    })
+    .then(() => {
+      var todos = this.state.todos;
+      todos.push(item)
+      this.setState({
+        todos
+      })
+    })
+    .catch((airhor) => {
+      console.log(airhor)
     })
   },
 
