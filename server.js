@@ -59,6 +59,19 @@ app.post('/api/todos', function (req, res) {
   });
 });
 
+app.delete('/api/todos', function (req, res) {
+  var todo = new Todo();
+  Todo.find({_id: req.body._id}, function (err, todos) {
+    var arrTodos = todos;
+    if (err) {
+      res.send(500);
+    } else {
+      console.log(todos);
+      res.json({success: true});
+    }
+  });
+});
+
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
