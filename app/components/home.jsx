@@ -1,6 +1,6 @@
 var React = require("react")
 var Axios = require('axios')
-var {get, post, delete} = Axios
+var {get, post} = Axios
 
 var TodoItem = require('./item')
 var BlankItem = require('./blankItem')
@@ -50,7 +50,7 @@ var Home = React.createClass({
 
   remove(i) {
     var todo = this.state.todos[i];
-    delete('/api/todos', {_id: todo._id})
+    Axios.delete('/api/todos/' + todo._id)
     .then((datr) => {
       console.log(datr)
       var todos = this.state.todos;
